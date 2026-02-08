@@ -1,12 +1,37 @@
 import pygame
 import PIL
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Optional, List, Tuple
 
 # Config
 BASE_WIDTH = 320
 BASE_HEIGHT = 180
 WINDOW_SCALE = 2
 FPS = 120
+
+LANE_COUNT = 5
+LANE_KEYS = [pygame.K_a, pygame.K_s, pygame.K_d, pygame.K_k, pygame.K_l]
+
+HIGHWAY_W = 128
+LANE_W = 25 # tweak this to adjust lane spacing; 25 is pretty close to the original
+
+# Visual / Timing Tuning
+HIGHWAY_Y = 20 # tweak between 16–32 until it feels right
+HIT_LINE_Y = int(BASE_HEIGHT * 0.72) # where the player is supposed to hit notes; tweak as needed
+SPAWN_Y = -20  # where notes spawn at the top
+APPROACH_MS = 1200 # how long (in ms) it takes for a note to fall from spawn to hit line; tweak for difficulty
+
+# Judgement windows (in ms)
+JUDGEMENT_WINDOWS = 25
+W_GOOD = 45
+W_OK = 75
+
+# Scoring
+S_PERFECT = 1000
+S_GOOD = 700
+S_OK = 300
+
 
 BASE_DIR = Path(__file__).resolve().parent
 ASSETS = BASE_DIR / "assets"
@@ -56,7 +81,6 @@ def main():
 
         # center the highway (128x180) on the 320-wide screen
         highway_x = (BASE_WIDTH - highway.get_width()) // 2
-        HIGHWAY_Y = 20  # tweak between 16–32 until it feels right
         base.blit(highway, (highway_x, HIGHWAY_Y))
 
         # UI example placement (optional)
